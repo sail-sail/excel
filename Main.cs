@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace excel
@@ -15,6 +16,12 @@ namespace excel
                 visible = true;
             }
             string activePrinter = (string)input.activePrinter;
+            if (excelPath.StartsWith("http://") || excelPath.StartsWith("https://")) {
+                WebClient client = new WebClient();
+                string tempFile = Path.GetTempFileName();
+                client.DownloadFile(excelPath, tempFile);
+                excelPath = tempFile;
+            }
             Microsoft.Office.Interop.Excel.Application xApp = new Microsoft.Office.Interop.Excel.Application();
             xApp.Visible = visible;
             Microsoft.Office.Interop.Excel.Workbook xBook = xApp.Workbooks._Open(excelPath);
