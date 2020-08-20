@@ -17,6 +17,8 @@ namespace excel
             }
             string activePrinter = (string)input.activePrinter;
             if (excelPath.StartsWith("http://") || excelPath.StartsWith("https://")) {
+                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
                 WebClient client = new WebClient();
                 string tempFile = Path.GetTempFileName();
                 client.DownloadFile(excelPath, tempFile);
